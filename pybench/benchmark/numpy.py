@@ -95,21 +95,21 @@ class MatInv(Benchmark):
     
     dtype: str = None
     shape: List[int] = None
-    arrays: Tuple[np.ndarray, np.ndarray] = None
+    array: np.ndarray = None
     
     def setup(self, dtype: str, *shape: int) -> None: 
         try:
             self.dtype = dtype
             self.shape = list(map(int, shape))
-            if len(shape) == 2: #ask
-                self.arrays = None  # noqa: allow de-allocation
-                self.arrays = np.random.rand(*self.shape).astype(dtype), np.random.rand(*self.shape).astype(dtype)
+            if len(shape) == 2:
+                self.array = None  # noqa: allow de-allocation
+                self.array = np.random.rand(*self.shape).astype(dtype)
             else: 
-                raise BenchmarkError(f'expected 2D for \'{self.name}\', given {len(shape)}{shape}') #ask
+                raise BenchmarkError(f'expected 2D for \'{self.name}\', given {len(shape)}{shape}')
         except Exception as error:
                 raise BenchmarkError(f'args for \'{self.name}\': {error}') from error
 
     def task(self) -> None:
-        np.linalg.inv(*self.arrays) #ask
+        np.linalg.inv(self.array)
         
     
